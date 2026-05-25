@@ -1,0 +1,81 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, system-ui, sans-serif;
+  background: #0b0b12;
+  color: #f5f5f7;
+  min-height: 100vh;
+}
+
+.page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 4rem 1.5rem;
+}
+
+h1 {
+  font-size: 2.25rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  background: linear-gradient(90deg, #ec4899, #06b6d4);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.grid {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.grid li {
+  background: #15151f;
+  border: 2px solid;
+  border-radius: 14px;
+  padding: 1.25rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+}
+
+.tag {
+  align-self: flex-start;
+  font-size: .7rem;
+  font-weight: 700;
+  padding: .25rem .6rem;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.6);
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+}
+
+.card {
+  background: #15151f;
+  border: 2px solid;
+  border-radius: 18px;
+  padding: 2rem;
+  max-width: 480px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.card h2 { font-size: 1.75rem; }
+.card code {
+  background: #0b0b12;
+  padding: .1rem .4rem;
+  border-radius: 4px;
+  font-size: .9em;
+}
