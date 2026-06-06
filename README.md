@@ -155,3 +155,20 @@ Una vez aprobados los MCP, simplemente pídele a Claude algo como:
 
 Claude activará el skill de diseño, traerá componentes vía los MCP de Magic UI / shadcn,
 y usará Playwright para abrir y verificar el resultado.
+
+## Recursos extra (video de `@duncanrogoff`)
+
+Otros videos sobre "sitios web con IA" muestran recursos que se solapan con los combos de
+arriba. Estado en este repo:
+
+| Recurso | Qué aporta | Estado |
+|---|---|:---:|
+| [UI UX Pro Max](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) | Skill con 57 estilos UI, 95 paletas, 56 font pairings, charts y landing patterns. | ✅ instalado en `.claude/skills/ui-ux-pro-max` |
+| [Framer Motion](https://www.npmjs.com/package/framer-motion) | Librería de animación para React (demo en `demo-react/`). | ✅ instalado en la demo |
+| [21st.dev](https://21st.dev/community/components) | Galería de componentes React de la comunidad + Magic MCP para generarlos. | ⚙️ opcional — el MCP requiere API key gratuita de 21st.dev |
+
+> **21st.dev Magic MCP** (`@21st-dev/magic`) necesita una API key gratuita que se obtiene
+> creando cuenta en [21st.dev](https://21st.dev). Si la consigues, se añade con:
+> ```bash
+> claude mcp add magic -e API_KEY=tu_key -- npx -y @21st-dev/magic@latest
+> ```
