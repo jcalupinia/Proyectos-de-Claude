@@ -103,3 +103,55 @@ Abre `http://localhost:5173` y verás un componente animado.
 
 - `claude-mem`, `uipro`, `ecc` y `n8n-mcp` modifican configuración global (`~/.claude/`, `~/.config/`, npm global). El script avisa antes de cada paso.
 - Si trabajas en Claude Code on the web, instalar plugins de Claude Code dentro del contenedor remoto no persiste — corre el script en tu máquina local.
+
+---
+
+# Combo WEB de Claude para diseñar
+
+Segundo combo del reel de `@soyenriquerocha` ("Mi combo WEB de Claude para diseñar").
+Son 4 herramientas pensadas para **diseñar y construir páginas web** con Claude.
+Ya están instaladas/configuradas en este repo.
+
+| # | Herramienta | Qué hace | Tipo |
+|---|---|---|---|
+| 1 | [Frontend Design](https://github.com/anthropics/skills/tree/main/frontend-design) | Skill oficial de Anthropic que hace que Claude diseñe interfaces con criterio (tipografía, paletas, animaciones) y evite el look genérico de "AI slop". | Skill |
+| 2 | [Magic UI MCP](https://magicui.design/docs/mcp) | Da a Claude acceso directo a todos los componentes animados de Magic UI para generarlos sin errores. | Servidor MCP |
+| 3 | [shadcn MCP](https://ui.shadcn.com/docs/mcp) | Permite a Claude buscar e instalar componentes de shadcn/ui (y otros registros) en lenguaje natural. | Servidor MCP |
+| 4 | [Playwright MCP](https://github.com/microsoft/playwright-mcp) | Da a Claude control de un navegador real para ver, probar y depurar la web que construye. | Servidor MCP |
+
+## Cómo quedó instalado
+
+- **Frontend Design** → skill en `.agents/skills/frontend-design` (con symlink en `.claude/skills/`).
+- **Magic UI / shadcn / Playwright** → definidos en [`.mcp.json`](./.mcp.json) (alcance de proyecto). La primera vez que abras `claude` te pedirá **aprobar** estos 3 servidores MCP; acepta y quedan activos.
+- El navegador de Playwright (Chromium) ya está descargado en el entorno.
+
+## Instalación manual (en otra máquina/proyecto)
+
+```bash
+# 1. Skill Frontend Design
+npx skills add https://github.com/anthropics/skills --skill frontend-design
+
+# 2. Magic UI MCP
+npx @magicuidesign/cli@latest install claude
+
+# 3. shadcn MCP
+npx shadcn@latest mcp init --client claude
+
+# 4. Playwright MCP (+ navegador)
+claude mcp add playwright npx @playwright/mcp@latest
+npx playwright install chromium
+```
+
+> En este repo los 3 MCP se dejaron directamente en `.mcp.json` para que la configuración
+> sea **permanente y versionada**, en lugar de quedar solo en el config local del entorno
+> (que es efímero en Claude Code on the web).
+
+## Cómo usarlo
+
+Una vez aprobados los MCP, simplemente pídele a Claude algo como:
+
+> "Diséñame una landing page para una startup de seguridad con modo oscuro,
+> usa componentes de shadcn y Magic UI, y ábrela en el navegador para revisarla."
+
+Claude activará el skill de diseño, traerá componentes vía los MCP de Magic UI / shadcn,
+y usará Playwright para abrir y verificar el resultado.
