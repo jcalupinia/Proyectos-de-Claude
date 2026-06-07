@@ -183,10 +183,26 @@ arriba. Estado en este repo:
 |---|---|:---:|
 | [UI UX Pro Max](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) | Skill con 57 estilos UI, 95 paletas, 56 font pairings, charts y landing patterns. | ✅ instalado en `.claude/skills/ui-ux-pro-max` |
 | [Framer Motion](https://www.npmjs.com/package/framer-motion) | Librería de animación para React (demo en `demo-react/`). | ✅ instalado en la demo |
-| [21st.dev](https://21st.dev/community/components) | Galería de componentes React de la comunidad + Magic MCP para generarlos. | ⚙️ opcional — el MCP requiere API key gratuita de 21st.dev |
+| [21st.dev](https://21st.dev/community/components) | Galería de componentes React + Magic MCP para generarlos con IA. | 🖥️ **solo local** — ver abajo |
 
-> **21st.dev Magic MCP** (`@21st-dev/magic`) necesita una API key gratuita que se obtiene
-> creando cuenta en [21st.dev](https://21st.dev). Si la consigues, se añade con:
-> ```bash
-> claude mcp add magic -e API_KEY=tu_key -- npx -y @21st-dev/magic@latest
-> ```
+### 21st.dev Magic MCP — configuración para uso local
+
+`21st.dev` es un **servicio en vivo** (genera componentes con IA llamando a su API). A
+diferencia de Magic UI, **no tiene un mirror estático** en GitHub. Y su dominio está
+**bloqueado por la política de red del entorno remoto** (`21st.dev` da 403 desde el sandbox).
+Por eso **este MCP solo funciona en tu máquina local**, no en Claude Code on the web.
+
+Para dejarlo listo en local, hay un script que solo pide tu API key (no se guarda en git):
+
+```bash
+# 1. Consigue tu API key gratuita en https://21st.dev/magic/console
+# 2. En tu computadora, dentro del repo:
+./scripts/setup-21st-local.sh TU_API_KEY
+```
+
+El script lo registra a nivel de usuario (`claude mcp add magic -s user ...`), así la key
+queda fuera del repositorio. Tras reiniciar Claude Code, podrás pedir cosas como
+*"usa 21st.dev para crear un hero section animado"*.
+
+> En el entorno remoto este paso se omite a propósito: `magicui` + `shadcn` ya cubren
+> componentes de sobra.
