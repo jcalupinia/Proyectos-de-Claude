@@ -1,65 +1,65 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Este archivo proporciona guía a Claude Code (claude.ai/code) cuando trabaja con código en este repositorio.
 
-## Repository purpose
+## Propósito del repositorio
 
-Companion repo to a reel by `@soyenriquerocha` listing 5 free tools that extend Claude Code. It ships:
+Repositorio complementario al reel de `@soyenriquerocha` que lista 5 herramientas gratuitas que extienden Claude Code. Incluye:
 
-- `install.sh` — a Bash installer that wires those 5 tools into the user's local Claude Code setup.
-- `demo-react/` — a minimal Vite + React 18 app that demonstrates the framer-motion tool from the list.
+- `install.sh` — instalador en Bash que integra esas 5 herramientas en la configuración local de Claude Code del usuario.
+- `demo-react/` — app mínima en Vite + React 18 que demuestra la herramienta framer-motion de la lista.
 
-The repo itself is not a library or product — there is no test suite, no lint config, no CI. Changes are almost always to the installer, the README (Spanish), or the demo.
+El repo en sí no es una librería ni un producto — no hay suite de tests, ni configuración de lint, ni CI. Los cambios casi siempre son al instalador, al README (en español) o a la demo.
 
-## Common commands
+## Comandos comunes
 
-Installer (run from repo root):
+Instalador (ejecutar desde la raíz del repo):
 
 ```bash
-./install.sh                              # interactive menu
-./install.sh --all                        # install all 5
-./install.sh --n8n --claude-mem --uipro   # subset (flags: --n8n --claude-mem --uipro --ecc --framer-motion)
-./install.sh -h                           # help (parsed from the leading `# ` block)
+./install.sh                              # menú interactivo
+./install.sh --all                        # instala las 5
+./install.sh --n8n --claude-mem --uipro   # subconjunto (flags: --n8n --claude-mem --uipro --ecc --framer-motion)
+./install.sh -h                           # ayuda (parseada del bloque inicial `# `)
 ```
 
-Requires `node >= 18`, `npm`, and the `claude` CLI on PATH (only `--n8n` hard-requires `claude`; others warn).
+Requiere `node >= 18`, `npm` y la CLI `claude` en el PATH (solo `--n8n` exige `claude` obligatoriamente; las demás solo avisan).
 
-Demo app (`demo-react/`):
+App de demo (`demo-react/`):
 
 ```bash
 cd demo-react
-npm install        # or `../install.sh --framer-motion` from repo root
-npm run dev        # vite dev server on :5173
-npm run build      # production build
-npm run preview    # serve the built bundle
+npm install        # o `../install.sh --framer-motion` desde la raíz del repo
+npm run dev        # servidor de desarrollo de vite en :5173
+npm run build      # build de producción
+npm run preview    # sirve el bundle ya compilado
 ```
 
-## Architecture notes
+## Notas de arquitectura
 
-### `install.sh` structure
+### Estructura de `install.sh`
 
-One installer per tool, each as its own `install_X` function (`install_n8n`, `install_claude_mem`, `install_uipro`, `install_ecc`, `install_framer`). The bottom of the file gates each function on a `WANT_*` flag set during arg parsing or the interactive prompt. To add a tool, add: a flag in the `for arg in "$@"` case block, a prompt in the `INTERACTIVE` block, an `install_X` function, and a gated call at the bottom.
+Un instalador por herramienta, cada uno como su propia función `install_X` (`install_n8n`, `install_claude_mem`, `install_uipro`, `install_ecc`, `install_framer`). El final del archivo invoca cada función condicionada a una bandera `WANT_*` que se asigna durante el parseo de argumentos o el prompt interactivo. Para añadir una herramienta hay que agregar: un flag en el bloque `case` de `for arg in "$@"`, un prompt en el bloque `INTERACTIVE`, una función `install_X` y una llamada condicionada al final.
 
-The script is `set -euo pipefail`, uses colored `info`/`ok`/`warn`/`fail` helpers, and a `require <cmd>` preflight helper. Reuse these instead of inlining new logging or `command -v` checks.
+El script usa `set -euo pipefail`, helpers de logging con colores `info`/`ok`/`warn`/`fail`, y un helper de preflight `require <cmd>`. Reusa estos en vez de inlinear nuevos logs o checks de `command -v`.
 
-### n8n-MCP `.env` handling
+### Manejo de `.env` para n8n-MCP
 
-`install_n8n` looks for `./.env` (gitignored) and, if `N8N_API_URL` + `N8N_API_KEY` are set, registers n8n-MCP in **management mode** (Claude can execute workflows on a real n8n instance). Without `.env` it falls back to **documentation-only mode**. `.env.example` documents the variables. Before reinstalling, it removes any existing `n8n-mcp` registration via `claude mcp remove` to avoid duplicate registrations.
+`install_n8n` busca `./.env` (gitignored) y, si `N8N_API_URL` + `N8N_API_KEY` están definidas, registra n8n-MCP en **modo management** (Claude puede ejecutar workflows en una instancia real de n8n). Sin `.env` cae al **modo solo documentación**. `.env.example` documenta las variables. Antes de reinstalar, elimina cualquier registro existente de `n8n-mcp` con `claude mcp remove` para evitar registros duplicados.
 
-### Modifications outside the repo
+### Modificaciones fuera del repo
 
-The installer writes to the user's global state — `~/.claude/`, `~/.config/`, npm global (`npm install -g uipro-cli`), and `~/.local/share/ecc` (git clone of ECC). When changing installer behavior, remember these side effects are not contained in the repo and are not undone by `git`. ECC has a `/plugin` alternative noted in the README; the script uses the manual `git clone` path because `/plugin` only works from inside Claude Code.
+El instalador escribe en el estado global del usuario — `~/.claude/`, `~/.config/`, npm global (`npm install -g uipro-cli`) y `~/.local/share/ecc` (git clone de ECC). Al cambiar el comportamiento del instalador, recuerda que estos efectos colaterales no están contenidos en el repo y no se deshacen con `git`. ECC tiene una alternativa con `/plugin` mencionada en el README; el script usa la ruta manual con `git clone` porque `/plugin` solo funciona dentro de Claude Code.
 
-### Remote (Web) sessions caveat
+### Sesiones remotas (Web)
 
-Plugins/skills installed inside a Claude Code on the web container do not persist — the container is ephemeral. The README and installer are written assuming the user runs `install.sh` on their local machine. Don't add features that depend on persistence inside the web container.
+Los plugins/skills instalados dentro de un contenedor de Claude Code on the web no persisten — el contenedor es efímero. El README y el instalador asumen que el usuario corre `install.sh` en su máquina local. No agregues features que dependan de persistencia dentro del contenedor web.
 
 ### `demo-react/`
 
-Self-contained Vite + React 18 + framer-motion demo. Single component (`src/App.jsx`) showing `motion.*`, `AnimatePresence`, and shared-layout animation via `layoutId`. No router, no state management, no tests. It exists to make `framer-motion` runnable in one step after the installer.
+Demo autocontenida de Vite + React 18 + framer-motion. Un solo componente (`src/App.jsx`) que muestra `motion.*`, `AnimatePresence` y animación de layout compartido vía `layoutId`. Sin router, sin gestión de estado, sin tests. Existe para que `framer-motion` quede ejecutable en un solo paso después del instalador.
 
-## Conventions
+## Convenciones
 
-- README and installer user-facing strings are in Spanish; match that when editing them. Code identifiers stay English.
-- Commits so far follow short imperative English subjects (`Add installer and demo for 5 free Claude tools`).
-- `.env` is gitignored; never commit credentials. `.env.example` is the template.
+- Los strings del README y del instalador dirigidos al usuario están en español; respétalo al editarlos. Los identificadores de código se quedan en inglés.
+- Los commits hasta ahora siguen sujetos cortos en imperativo en inglés (`Add installer and demo for 5 free Claude tools`).
+- `.env` está en `.gitignore`; nunca commitees credenciales. `.env.example` es la plantilla.
