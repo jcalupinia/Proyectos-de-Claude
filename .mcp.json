@@ -1,8 +1,8 @@
 {
   "mcpServers": {
     "magicui": {
-      "command": "npx",
-      "args": ["-y", "@magicuidesign/mcp@latest"]
+      "command": "bash",
+      "args": ["scripts/magicui-mcp.sh"]
     },
     "shadcn": {
       "command": "npx",
