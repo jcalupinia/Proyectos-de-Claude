@@ -123,7 +123,23 @@ Ya están instaladas/configuradas en este repo.
 
 - **Frontend Design** → skill en `.agents/skills/frontend-design` (con symlink en `.claude/skills/`).
 - **Magic UI / shadcn / Playwright** → definidos en [`.mcp.json`](./.mcp.json) (alcance de proyecto). La primera vez que abras `claude` te pedirá **aprobar** estos 3 servidores MCP; acepta y quedan activos.
-- El navegador de Playwright (Chromium) ya está descargado en el entorno.
+- **Playwright** usa el wrapper [`scripts/playwright-mcp.sh`](./scripts/playwright-mcp.sh), que autodetecta el Chromium pre-instalado en el entorno (`/opt/pw-browsers/...`) con `--no-sandbox --ignore-https-errors`. En una máquina local cae al modo estándar (`--browser chromium`).
+
+## Estado real verificado (entorno Claude Code on the web)
+
+Probé los 3 MCP en vivo. Estado en este entorno remoto:
+
+| MCP | Estado | Nota |
+|---|:---:|---|
+| **shadcn** | ✅ funciona | Devuelve el registro `@shadcn`, busca e instala componentes. |
+| **Playwright** | ✅ funciona | Lanza Chromium, renderiza y toma screenshots. Para sitios HTTPS externos usa `--ignore-https-errors` (el entorno tiene un proxy TLS). Ideal para revisar tus páginas en `localhost`. |
+| **Magic UI** | ⚠️ limitado | El server arranca, pero `magicui.design` devuelve **403** desde este sandbox (la **política de red** del entorno no tiene ese dominio en el allowlist). Funcionará en tu máquina local o si se amplía el allowlist de red. |
+
+> **Sobre la red del entorno remoto:** este sandbox bloquea dominios fuera de su allowlist
+> (`magicui.design` y `cdn.playwright.dev` dan 403). Por eso el Chromium se autodetecta del
+> pre-instalado en vez de descargarse, y Magic UI no puede bajar su registro aquí.
+> La política de red se elige al crear el entorno — ver
+> [docs](https://code.claude.com/docs/en/claude-code-on-the-web).
 
 ## Instalación manual (en otra máquina/proyecto)
 

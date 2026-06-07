@@ -9,8 +9,8 @@
       "args": ["shadcn@latest", "mcp"]
     },
     "playwright": {
-      "command": "npx",
-      "args": ["-y", "@playwright/mcp@latest"]
+      "command": "bash",
+      "args": ["scripts/playwright-mcp.sh"]
     }
   }
 }
