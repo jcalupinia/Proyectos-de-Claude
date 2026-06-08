@@ -1,0 +1,48 @@
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  src: url('/fonts/plus-jakarta.woff2') format('woff2');
+  font-weight: 400 800;
+  font-display: swap;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Dark Mode OLED — gold (confianza) + grape (tech) */
+    --background: 222 47% 6%;
+    --foreground: 210 40% 98%;
+    --card: 222 40% 9%;
+    --card-foreground: 210 40% 98%;
+    --primary: 38 92% 50%;            /* #F59E0B */
+    --primary-foreground: 222 47% 6%;
+    --secondary: 258 90% 66%;         /* #8B5CF6 */
+    --secondary-foreground: 210 40% 98%;
+    --muted: 222 30% 16%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 258 90% 66%;
+    --accent-foreground: 210 40% 98%;
+    --border: 222 30% 18%;
+    --input: 222 30% 18%;
+    --ring: 38 92% 50%;
+    --radius: 0.85rem;
+  }
+
+  * { border-color: hsl(var(--border)); }
+
+  body {
+    background: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  ::selection { background: hsl(var(--primary)); color: hsl(var(--primary-foreground)); }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  }
+}

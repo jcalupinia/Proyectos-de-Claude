@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "magicui": {
+      "command": "bash",
+      "args": ["scripts/magicui-mcp.sh"]
+    },
+    "shadcn": {
+      "command": "npx",
+      "args": ["shadcn@latest", "mcp"]
+    },
+    "playwright": {
+      "command": "bash",
+      "args": ["scripts/playwright-mcp.sh"]
+    }
+  }
+}
