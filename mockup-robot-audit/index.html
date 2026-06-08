@@ -56,6 +56,15 @@
     border-radius:999px;background:var(--panel);cursor:pointer}
   .avatar{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:.75rem;font-weight:700;
     color:#04130b;background:linear-gradient(135deg,var(--primary),var(--blue))}
+  /* Encabezado responsive: en móvil oculta el subtítulo y el email para que no desborde */
+  @media (max-width:640px){
+    .topbar{padding:.7rem 1rem}
+    .topbar .title{display:none}
+    .topbar .brand span:not(.avatar){font-size:.9rem}
+    .profile{padding:.25rem}
+    .profile>span:last-child{display:none}
+    .brand .divider{display:none}
+  }
 
   .wrap{max-width:1080px;margin:0 auto;padding:clamp(1rem,3vw,2rem)}
 
@@ -97,7 +106,7 @@
     color:var(--dim);cursor:pointer;padding:.3rem}
 
   /* segmented control (Modo de fecha) */
-  .seg{display:inline-flex;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:3px;gap:3px}
+  .seg{display:inline-flex;flex-wrap:wrap;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:3px;gap:3px}
   .seg button{appearance:none;border:0;background:none;color:var(--muted);font:inherit;font-weight:600;font-size:.85rem;
     padding:.45rem .85rem;border-radius:7px;cursor:pointer;transition:.15s}
   .seg button.on{background:var(--primary);color:#04130b}
@@ -139,8 +148,8 @@
   .chip-warn{color:var(--warn);background:color-mix(in srgb,var(--warn) 14%,transparent)}
 
   /* ---------- Tabla ---------- */
-  .tablecard{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
-  table{width:100%;border-collapse:collapse;font-size:.86rem}
+  .tablecard{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow-x:auto}
+  table{width:100%;min-width:560px;border-collapse:collapse;font-size:.86rem}
   thead th{text-align:left;color:var(--muted);font-weight:600;font-size:.76rem;text-transform:uppercase;
     letter-spacing:.04em;padding:.8rem 1rem;background:var(--panel-2);border-bottom:1px solid var(--line)}
   tbody td{padding:.85rem 1rem;border-bottom:1px solid var(--line-soft)}
