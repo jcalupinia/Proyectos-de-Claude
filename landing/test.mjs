@@ -16,7 +16,7 @@ async function dirSize(dir) {
 }
 const bytes = (await stat('index.html')).size + (await stat('assets/app.js')).size
   + (await stat('assets/styles.css')).size + (await stat('assets/fonts.css')).size
-  + await dirSize('assets/fonts');
+  + await dirSize('assets/fonts') + await dirSize('assets/img');
 const kb = (bytes / 1024).toFixed(1);
 ok(bytes < 200 * 1024, `Bundle total ${kb}KB < 200KB`);
 

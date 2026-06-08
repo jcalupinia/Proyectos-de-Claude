@@ -29,6 +29,13 @@ npx serve .        # o: python3 -m http.server
   + `FAQPage`).
 - **Tipografía:** Fraunces (display) + Public Sans (texto) — no genéricas.
 
+## Imágenes (`assets/img/`)
+
+Ilustraciones de **[unDraw](https://undraw.co/)** (licencia MIT, sin atribución obligatoria),
+obtenidas del repo open source [`balazser/undraw-svg-collection`](https://github.com/balazser/undraw-svg-collection)
+y **recoloreadas al verde de la marca** + trazos aclarados para fondo oscuro. Son SVG
+(escalan nítidas, sin peticiones extra pesadas). El robot acompaña el concepto "ROBOT AUDIT".
+
 ## Pruebas (`npm test`)
 
 Valida automáticamente: bundle < 200KB · un único H1 · jerarquía de encabezados ·
