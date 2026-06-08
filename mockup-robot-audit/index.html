@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SRI Robot Audit — Rediseño</title>
+<style>
+  @font-face{font-family:'Jakarta';src:url('assets/plus-jakarta.woff2') format('woff2');font-weight:400 800;font-display:swap}
+
+  :root{
+    --bg:#070b14; --bg-2:#0b1120; --panel:#111a2e; --panel-2:#0e1626;
+    --line:#1f2b45; --line-soft:#172238;
+    --text:#eaf0fb; --muted:#94a1bd; --dim:#5d6b88;
+    --primary:#22c55e; --primary-600:#16a34a; --primary-tint:#0f2a1c;
+    --blue:#5b8cff; --grape:#8b5cf6; --danger:#f0556a; --warn:#e7b24a;
+    --radius:14px; --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  }
+  [data-theme="light"]{
+    --bg:#eef2f8; --bg-2:#e6ebf3; --panel:#ffffff; --panel-2:#f4f7fb;
+    --line:#d8e0ee; --line-soft:#e7edf6; --text:#101828; --muted:#516081; --dim:#8593ad;
+    --primary-tint:#dcfce7;
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:
+      radial-gradient(60rem 30rem at 90% -10%, color-mix(in srgb,var(--blue) 12%, transparent), transparent 60%),
+      radial-gradient(50rem 30rem at -10% 10%, color-mix(in srgb,var(--primary) 10%, transparent), transparent 60%),
+      var(--bg);
+    color:var(--text); font-family:'Jakarta',system-ui,sans-serif; -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+  h1,h2,h3{letter-spacing:-.02em;line-height:1.1}
+  a{color:var(--primary);text-decoration:none}
+  ::selection{background:var(--primary);color:#04130b}
+  :focus-visible{outline:2px solid var(--primary);outline-offset:2px;border-radius:8px}
+
+  /* ---------- Marca ---------- */
+  .brand{display:flex;align-items:center;gap:.6rem;font-weight:800;letter-spacing:-.01em}
+  .emblem{width:34px;height:34px;flex:0 0 auto}
+
+  /* ---------- App shell ---------- */
+  .topbar{
+    position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;
+    gap:1rem;padding:.85rem clamp(1rem,3vw,2rem);
+    background:color-mix(in srgb,var(--bg-2) 86%, transparent);backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--line);
+  }
+  .topbar .title{font-size:.95rem;color:var(--muted);font-weight:600}
+  .topbar .title b{color:var(--text)}
+  .top-actions{display:flex;align-items:center;gap:.5rem}
+  .iconbtn{display:grid;place-items:center;width:38px;height:38px;border-radius:10px;border:1px solid var(--line);
+    background:var(--panel);color:var(--muted);cursor:pointer;transition:.15s}
+  .iconbtn:hover{color:var(--text);border-color:var(--primary)}
+  .profile{display:flex;align-items:center;gap:.55rem;padding:.3rem .3rem .3rem .7rem;border:1px solid var(--line);
+    border-radius:999px;background:var(--panel);cursor:pointer}
+  .avatar{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:.75rem;font-weight:700;
+    color:#04130b;background:linear-gradient(135deg,var(--primary),var(--blue))}
+
+  .wrap{max-width:1080px;margin:0 auto;padding:clamp(1rem,3vw,2rem)}
+
+  /* ---------- Tabs ---------- */
+  .tabs{display:flex;gap:.35rem;flex-wrap:wrap;border-bottom:1px solid var(--line);margin-bottom:1.5rem}
+  .tab{appearance:none;border:0;background:none;color:var(--muted);font:inherit;font-weight:600;
+    padding:.7rem 1rem;border-radius:10px 10px 0 0;cursor:pointer;position:relative;transition:.15s}
+  .tab:hover{color:var(--text)}
+  .tab.on{color:var(--text)}
+  .tab.on::after{content:"";position:absolute;left:.6rem;right:.6rem;bottom:-1px;height:2px;border-radius:2px;
+    background:var(--primary)}
+  .view{display:none;animation:fade .35s ease both}
+  .view.on{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  /* ---------- Secciones agrupadas (la gran mejora) ---------- */
+  .pagehead{margin-bottom:1.25rem}
+  .pagehead h1{font-size:clamp(1.5rem,3vw,2rem)}
+  .pagehead p{color:var(--muted);margin-top:.35rem}
+  .group{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);
+    padding:1.25rem;margin-bottom:1rem}
+  .group-h{display:flex;align-items:center;gap:.7rem;margin-bottom:1rem}
+  .step{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-weight:800;font-size:.8rem;
+    color:var(--primary);background:var(--primary-tint);border:1px solid color-mix(in srgb,var(--primary) 35%,transparent)}
+  .group-h h3{font-size:1.05rem}
+  .group-h small{color:var(--dim);font-weight:500;margin-left:auto}
+
+  .grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+  .field{display:flex;flex-direction:column;gap:.4rem}
+  .field label{font-size:.82rem;color:var(--muted);font-weight:600}
+  .field .hint{font-size:.72rem;color:var(--dim)}
+  .input,.select{width:100%;background:var(--panel-2);border:1px solid var(--line);color:var(--text);
+    border-radius:10px;padding:.7rem .8rem;font:inherit;font-size:.92rem;transition:.15s}
+  .input::placeholder{color:var(--dim)}
+  .input:focus,.select:focus{border-color:var(--primary);background:var(--bg-2);outline:none}
+  .input.mono{font-family:var(--mono);letter-spacing:.02em}
+  .pw{position:relative}
+  .pw .toggle{position:absolute;right:.5rem;top:50%;transform:translateY(-50%);background:none;border:0;
+    color:var(--dim);cursor:pointer;padding:.3rem}
+
+  /* segmented control (Modo de fecha) */
+  .seg{display:inline-flex;background:var(--panel-2);border:1px solid var(--line);border-radius:10px;padding:3px;gap:3px}
+  .seg button{appearance:none;border:0;background:none;color:var(--muted);font:inherit;font-weight:600;font-size:.85rem;
+    padding:.45rem .85rem;border-radius:7px;cursor:pointer;transition:.15s}
+  .seg button.on{background:var(--primary);color:#04130b}
+
+  /* toggles XML/PDF */
+  .toggles{display:flex;gap:.75rem;flex-wrap:wrap}
+  .chk{display:flex;align-items:center;gap:.6rem;background:var(--panel-2);border:1px solid var(--line);
+    border-radius:10px;padding:.6rem .9rem;cursor:pointer;font-weight:600;font-size:.9rem}
+  .chk input{accent-color:var(--primary);width:18px;height:18px}
+  .chk.on{border-color:var(--primary);background:var(--primary-tint)}
+
+  /* ---------- Botones ---------- */
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:.55rem;border:1px solid transparent;
+    border-radius:11px;padding:.8rem 1.3rem;font:inherit;font-weight:700;font-size:.92rem;cursor:pointer;transition:.15s}
+  .btn svg{width:18px;height:18px}
+  .btn-primary{background:var(--primary);color:#04130b}
+  .btn-primary:hover{background:var(--primary-600)}
+  .btn-ghost{background:transparent;border-color:var(--line);color:var(--text)}
+  .btn-ghost:hover{border-color:var(--muted)}
+  .btn-danger{background:transparent;border-color:color-mix(in srgb,var(--danger) 50%,transparent);color:var(--danger)}
+  .btn-danger:hover{background:color-mix(in srgb,var(--danger) 12%,transparent)}
+  .actions{display:flex;gap:.7rem;flex-wrap:wrap;align-items:center}
+  .actions .grow{flex:1}
+
+  /* barra de progreso del proceso */
+  .progress{margin-top:1rem;background:var(--panel-2);border:1px solid var(--line);border-radius:12px;padding:1rem 1.1rem}
+  .progress .row{display:flex;align-items:center;gap:.6rem;justify-content:space-between}
+  .progress .bar{height:8px;border-radius:99px;background:var(--line);overflow:hidden;margin-top:.7rem}
+  .progress .bar i{display:block;height:100%;width:62%;border-radius:99px;
+    background:linear-gradient(90deg,var(--primary),var(--blue));animation:load 2.2s ease-in-out infinite alternate}
+  @keyframes load{from{width:35%}to{width:78%}}
+
+  /* ---------- Chips de estado ---------- */
+  .chip{display:inline-flex;align-items:center;gap:.35rem;font-size:.74rem;font-weight:700;
+    padding:.2rem .55rem;border-radius:999px;border:1px solid transparent;white-space:nowrap}
+  .chip::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+  .chip-ok{color:var(--primary);background:var(--primary-tint);border-color:color-mix(in srgb,var(--primary) 30%,transparent)}
+  .chip-auth{color:var(--blue);background:color-mix(in srgb,var(--blue) 14%,transparent);border-color:color-mix(in srgb,var(--blue) 30%,transparent)}
+  .chip-warn{color:var(--warn);background:color-mix(in srgb,var(--warn) 14%,transparent)}
+
+  /* ---------- Tabla ---------- */
+  .tablecard{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+  table{width:100%;border-collapse:collapse;font-size:.86rem}
+  thead th{text-align:left;color:var(--muted);font-weight:600;font-size:.76rem;text-transform:uppercase;
+    letter-spacing:.04em;padding:.8rem 1rem;background:var(--panel-2);border-bottom:1px solid var(--line)}
+  tbody td{padding:.85rem 1rem;border-bottom:1px solid var(--line-soft)}
+  tbody tr:hover{background:var(--panel-2)}
+  td.mono{font-family:var(--mono);font-size:.82rem;color:var(--muted)}
+  .rowtoggle{background:none;border:1px solid var(--line);color:var(--muted);width:24px;height:24px;border-radius:7px;cursor:pointer}
+  .detail{display:none;background:var(--panel-2)}
+  .detail.on{display:table-row}
+  .detail td{padding:0}
+  .detail .inner{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:.8rem;padding:1rem 1.2rem}
+  .detail .kv span{display:block;color:var(--dim);font-size:.72rem;text-transform:uppercase;letter-spacing:.04em}
+  .detail .kv b{font-weight:600}
+  .totalbar{display:flex;align-items:center;gap:.6rem;justify-content:space-between;padding:.9rem 1.1rem;
+    background:var(--primary-tint);border-top:1px solid color-mix(in srgb,var(--primary) 30%,transparent);font-weight:700}
+
+  /* ---------- Acordeón ayuda ---------- */
+  .acc{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+  .acc details{border-bottom:1px solid var(--line-soft)}
+  .acc details:last-child{border-bottom:0}
+  .acc summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:.8rem;padding:1rem 1.2rem;font-weight:600}
+  .acc summary::-webkit-details-marker{display:none}
+  .acc summary .ic{color:var(--primary)}
+  .acc summary .pm{margin-left:auto;color:var(--dim);transition:.2s}
+  .acc details[open] .pm{transform:rotate(45deg)}
+  .acc .body{padding:0 1.2rem 1.2rem 3.4rem;color:var(--muted);font-size:.9rem}
+  .quickstart{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-bottom:1.25rem}
+  .qs{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:1.1rem}
+  .qs .n{color:var(--primary);font-family:var(--mono);font-weight:700;font-size:.85rem}
+  .qs h4{margin:.4rem 0 .3rem}
+  .qs p{color:var(--muted);font-size:.85rem}
+
+  /* ---------- Login ---------- */
+  #login{display:none;min-height:100vh;place-items:center;padding:2rem}
+  #login.on{display:grid}
+  .login-card{width:100%;max-width:420px;text-align:center}
+  .robot{width:120px;height:120px;margin:0 auto .5rem}
+  .login-card h1{font-size:1.7rem;margin-bottom:.4rem}
+  .login-card .sub{color:var(--muted);font-size:.92rem;margin-bottom:1.5rem}
+  .login-form{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:1.5rem;text-align:left;
+    box-shadow:0 30px 60px -25px rgba(0,0,0,.7);position:relative;overflow:hidden}
+  .login-form .beam{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--primary),var(--blue),transparent)}
+  .login-form .field{margin-bottom:1rem}
+  .login-foot{margin-top:1rem;text-align:center;font-size:.85rem;color:var(--muted)}
+  .badge{display:inline-flex;align-items:center;gap:.4rem;font-size:.72rem;font-weight:700;color:var(--primary);
+    background:var(--primary-tint);border:1px solid color-mix(in srgb,var(--primary) 30%,transparent);
+    padding:.3rem .7rem;border-radius:999px;margin-bottom:1rem}
+  .hidden{display:none!important}
+</style>
+</head>
+<body>
+
+<!-- ============ EMBLEMA REUTILIZABLE ============ -->
+<svg width="0" height="0" style="position:absolute"><defs>
+  <linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5b8cff"/><stop offset="1" stop-color="#22c55e"/></linearGradient>
+</defs></svg>
+
+<!-- ============ LOGIN / RECUPERAR ============ -->
+<div id="login">
+  <div class="login-card">
+    <svg class="robot" viewBox="0 0 120 120" fill="none" aria-hidden="true">
+      <circle cx="84" cy="40" r="18" fill="none" stroke="#22c55e" stroke-width="2.5"/>
+      <text x="84" y="38" text-anchor="middle" font-size="9" font-weight="800" fill="#22c55e">AUDIT</text>
+      <text x="84" y="48" text-anchor="middle" font-size="9" font-weight="800" fill="#22c55e">IA</text>
+      <rect x="30" y="34" width="26" height="24" rx="7" fill="none" stroke="url(#g)" stroke-width="2.5"/>
+      <circle cx="39" cy="46" r="2.4" fill="#5b8cff"/><circle cx="47" cy="46" r="2.4" fill="#5b8cff"/>
+      <path d="M43 58 V72 M43 72 H62 M43 72 H30 M30 72 V86 M62 72 V64" stroke="url(#g)" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>
+
+    <div id="view-login">
+      <h1>Iniciar sesión</h1>
+      <p class="sub">Accede a tu Robot de auditoría del SRI</p>
+      <form class="login-form" onsubmit="enter();return false">
+        <span class="beam"></span>
+        <span class="badge">● Sesión vinculada al dispositivo</span>
+        <div class="field"><label for="le">Correo electrónico</label>
+          <input class="input" id="le" type="email" placeholder="tucorreo@empresa.com" value="prueba@test.com"></div>
+        <div class="field"><label for="lp">Contraseña</label>
+          <div class="pw"><input class="input" id="lp" type="password" placeholder="••••••••" value="123456">
+            <button type="button" class="toggle" onclick="pw('lp',this)">👁</button></div></div>
+        <button class="btn btn-primary" style="width:100%">Iniciar sesión</button>
+        <div class="login-foot"><a href="#" onclick="rec(true);return false">¿Olvidaste tu contraseña?</a></div>
+      </form>
+    </div>
+
+    <div id="view-rec" class="hidden">
+      <h1>Recuperar contraseña</h1>
+      <p class="sub">Te enviaremos un enlace para restablecerla</p>
+      <form class="login-form" onsubmit="rec(false);return false">
+        <span class="beam"></span>
+        <div class="field"><label for="re">Correo electrónico</label>
+          <input class="input" id="re" type="email" placeholder="tucorreo@empresa.com"></div>
+        <button class="btn btn-primary" style="width:100%">Enviar enlace</button>
+        <div class="login-foot"><a href="#" onclick="rec(false);return false">← Volver a iniciar sesión</a></div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ============ APP ============ -->
+<div id="app">
+  <header class="topbar">
+    <div class="brand">
+      <svg class="emblem" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+        <rect x="2" y="2" width="36" height="36" rx="11" fill="none" stroke="url(#g)" stroke-width="2.2"/>
+        <circle cx="15" cy="17" r="2.6" fill="#5b8cff"/><circle cx="25" cy="17" r="2.6" fill="#22c55e"/>
+        <path d="M13 26c2 2.4 4.3 3.4 7 3.4s5-1 7-3.4" stroke="#eaf0fb" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <span>SRI&nbsp;Robot&nbsp;Audit</span>
+    </div>
+    <span class="title">Descarga y <b>Reporte Automático</b></span>
+    <div class="top-actions">
+      <button class="iconbtn" title="Cambiar tema" onclick="theme()">◐</button>
+      <div class="profile" onclick="logout()" title="Cerrar sesión">
+        <span class="avatar">PT</span>
+        <span style="font-size:.82rem;color:var(--muted)">prueba@test.com</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <nav class="tabs" role="tablist">
+      <button class="tab on" onclick="go(0,this)">Descarga de comprobantes</button>
+      <button class="tab" onclick="go(1,this)">Reporte e Historial</button>
+      <button class="tab" onclick="go(2,this)">Consolidación</button>
+      <button class="tab" onclick="go(3,this)">Ayuda</button>
+    </nav>
+
+    <!-- ===== 1. DESCARGA (principal, agrupada) ===== -->
+    <section class="view on">
+      <div class="pagehead">
+        <h1>Descarga de comprobantes</h1>
+        <p>Configura credenciales y filtros; el robot descarga todo automáticamente.</p>
+      </div>
+
+      <div class="group">
+        <div class="group-h"><span class="step">1</span><h3>Credenciales</h3><small>Datos del SRI</small></div>
+        <div class="grid">
+          <div class="field"><label>RUC</label><input class="input mono" placeholder="1790000000001"></div>
+          <div class="field"><label>Clave del SRI</label>
+            <div class="pw"><input class="input" type="password" placeholder="••••••••" value="123456">
+              <button type="button" class="toggle" onclick="pw(this.previousElementSibling,this)">👁</button></div></div>
+        </div>
+      </div>
+
+      <div class="group">
+        <div class="group-h"><span class="step">2</span><h3>Filtros</h3><small>Qué descargar</small></div>
+        <div class="grid">
+          <div class="field"><label>Origen de comprobantes</label>
+            <select class="select"><option>Recibidos</option><option>Emitidos</option></select></div>
+          <div class="field"><label>Tipo de comprobante</label>
+            <select class="select"><option>Facturas</option><option>Notas de crédito</option><option>Retenciones</option><option>Todos</option></select></div>
+          <div class="field"><label>Formato a descargar</label>
+            <select class="select"><option>XML + PDF</option><option>Solo XML</option><option>Solo PDF</option></select></div>
+        </div>
+        <div class="field" style="margin-top:1rem">
+          <label>Modo de fecha</label>
+          <div class="seg" id="seg1">
+            <button class="on" onclick="seg(this,'f1')">Mes y día</button>
+            <button onclick="seg(this,'f1')">Rango de meses</button>
+            <button onclick="seg(this,'f1')">Año completo</button>
+          </div>
+        </div>
+        <div class="grid" id="f1" style="margin-top:1rem">
+          <div class="field"><label>Año</label><select class="select"><option>2026</option><option>2025</option></select></div>
+          <div class="field"><label>Mes</label><select class="select"><option>Junio</option><option>Mayo</option></select></div>
+          <div class="field"><label>Día <span class="hint">(0 = todos)</span></label><input class="input mono" value="0"></div>
+        </div>
+      </div>
+
+      <div class="group">
+        <div class="group-h"><span class="step">3</span><h3>Carpeta destino</h3><small>Dónde se guardan</small></div>
+        <div class="actions">
+          <input class="input grow" placeholder="Ruta seleccionada…" value="C:\\AuditSRI\\Descargas" readonly>
+          <button class="btn btn-ghost">📁 Seleccionar carpeta</button>
+        </div>
+      </div>
+
+      <div class="group">
+        <div class="group-h"><span class="step">4</span><h3>Ejecutar</h3></div>
+        <div class="actions">
+          <button class="btn btn-primary" onclick="run(this)">▶ Iniciar proceso</button>
+          <button class="btn btn-danger">■ Detener</button>
+          <span style="margin-left:auto;color:var(--dim);font-size:.82rem">Versión 2026.06.01.1</span>
+        </div>
+        <div class="progress" id="prog" style="display:none">
+          <div class="row"><b>Descargando comprobantes…</b><span class="chip chip-ok">en proceso</span></div>
+          <div class="bar"><i></i></div>
+          <div class="row" style="margin-top:.6rem;color:var(--muted);font-size:.82rem"><span>148 de 240 documentos</span><span class="mono">RUC 1790000000001</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 2. REPORTE E HISTORIAL ===== -->
+    <section class="view">
+      <div class="pagehead"><h1>Reporte e Historial</h1><p>Genera reportes por fechas y revisa las ejecuciones recientes.</p></div>
+
+      <div class="group">
+        <div class="group-h"><span class="step">1</span><h3>Generar reporte por fechas</h3></div>
+        <div class="grid">
+          <div class="field"><label>Carpeta fuente</label><input class="input" value="C:\\AuditSRI\\Descargas" readonly></div>
+          <div class="field"><label>Origen</label><select class="select"><option>Recibidos</option><option>Emitidos</option></select></div>
+          <div class="field"><label>Tipo de comprobante</label><select class="select"><option>Facturas</option><option>Todos</option></select></div>
+        </div>
+        <div class="actions" style="margin-top:1rem">
+          <button class="btn btn-primary">📊 Generar reporte por fechas</button>
+        </div>
+      </div>
+
+      <h3 style="margin:1.5rem 0 .8rem">Historial de ejecuciones recientes</h3>
+      <div class="grid" style="margin-bottom:1rem">
+        <div class="field"><label>Búsqueda</label><input class="input" placeholder="RUC, descripción, estado…"></div>
+        <div class="field"><label>Origen</label><select class="select"><option>Todos</option><option>Emitidos</option></select></div>
+        <div class="field"><label>Estado autorización</label><select class="select"><option>Todos</option><option>Autorizados</option></select></div>
+      </div>
+
+      <div class="tablecard">
+        <table>
+          <thead><tr><th></th><th>Fecha y hora</th><th>RUC</th><th>Tipo</th><th>Estado</th><th>Autorización</th><th>Periodo</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><button class="rowtoggle" onclick="exp(this)">+</button></td>
+              <td class="mono">2026-06-02 11:08</td><td class="mono">1790602885001</td>
+              <td>Notas de crédito</td><td><span class="chip chip-ok">ok</span></td>
+              <td><span class="chip chip-auth">Autorizados</span></td><td class="mono">11/2025</td>
+            </tr>
+            <tr class="detail"><td colspan="7"><div class="inner">
+              <div class="kv"><span>Origen</span><b>Emitidos</b></div>
+              <div class="kv"><span>Establecimiento</span><b>Todos</b></div>
+              <div class="kv"><span>Fecha filtro</span><b>28/11/2025</b></div>
+              <div class="kv"><span>Descripción</span><b>Notas de crédito</b></div>
+            </div></td></tr>
+
+            <tr>
+              <td><button class="rowtoggle" onclick="exp(this)">+</button></td>
+              <td class="mono">2026-06-02 11:04</td><td class="mono">1790602885001</td>
+              <td>Notas de crédito</td><td><span class="chip chip-ok">ok</span></td>
+              <td><span class="chip chip-auth">Autorizados</span></td><td class="mono">11/2025</td>
+            </tr>
+            <tr class="detail"><td colspan="7"><div class="inner">
+              <div class="kv"><span>Origen</span><b>Emitidos</b></div>
+              <div class="kv"><span>Establecimiento</span><b>Todos</b></div>
+              <div class="kv"><span>Fecha filtro</span><b>25/11/2025</b></div>
+              <div class="kv"><span>Descripción</span><b>Notas de crédito</b></div>
+            </div></td></tr>
+
+            <tr>
+              <td><button class="rowtoggle" onclick="exp(this)">+</button></td>
+              <td class="mono">2026-06-02 10:52</td><td class="mono">1790602885001</td>
+              <td>Notas de crédito</td><td><span class="chip chip-warn">pendiente</span></td>
+              <td><span class="chip chip-auth">Autorizados</span></td><td class="mono">01/2025</td>
+            </tr>
+            <tr class="detail"><td colspan="7"><div class="inner">
+              <div class="kv"><span>Origen</span><b>Emitidos</b></div>
+              <div class="kv"><span>Establecimiento</span><b>Todos</b></div>
+              <div class="kv"><span>Fecha filtro</span><b>01/01/2025 – 31/12/2025</b></div>
+              <div class="kv"><span>Descripción</span><b>Notas de crédito</b></div>
+            </div></td></tr>
+          </tbody>
+        </table>
+        <div class="totalbar"><span>Total de operaciones registradas</span><span class="chip chip-ok">3</span></div>
+      </div>
+    </section>
+
+    <!-- ===== 3. CONSOLIDACIÓN ===== -->
+    <section class="view">
+      <div class="pagehead"><h1>Consolidación de documentos</h1><p>Genera reportes consolidados desde una carpeta ya descargada.</p></div>
+
+      <div class="group">
+        <div class="group-h"><span class="step">1</span><h3>Carpeta origen</h3></div>
+        <div class="actions">
+          <input class="input grow" placeholder="Carpeta a consolidar…" value="C:\\AuditSRI\\Descargas">
+          <button class="btn btn-ghost">📁 Seleccionar</button>
+          <button class="btn btn-ghost">Usar carpeta de descargas</button>
+        </div>
+      </div>
+
+      <div class="group">
+        <div class="group-h"><span class="step">2</span><h3>Filtros</h3></div>
+        <div class="grid">
+          <div class="field"><label>RUC <span class="hint">(opcional)</span></label><input class="input mono" placeholder="Todos"></div>
+          <div class="field"><label>Origen</label><select class="select"><option>Recibidos</option><option>Emitidos</option></select></div>
+          <div class="field"><label>Tipo de comprobante</label><select class="select"><option>Facturas</option><option>Todos</option></select></div>
+          <div class="field"><label>Año</label><select class="select"><option>2026</option><option>2025</option></select></div>
+        </div>
+        <div class="field" style="margin-top:1rem"><label>Modo de fecha</label>
+          <div class="seg"><button class="on" onclick="seg(this)">Mes y día</button><button onclick="seg(this)">Rango de meses</button><button onclick="seg(this)">Año completo</button></div>
+        </div>
+      </div>
+
+      <div class="group">
+        <div class="group-h"><span class="step">3</span><h3>Salida</h3></div>
+        <div class="toggles">
+          <label class="chk on"><input type="checkbox" checked onchange="this.closest('.chk').classList.toggle('on',this.checked)"> Consolidar XML</label>
+          <label class="chk on"><input type="checkbox" checked onchange="this.closest('.chk').classList.toggle('on',this.checked)"> Consolidar PDF</label>
+        </div>
+        <div class="actions" style="margin-top:1rem"><button class="btn btn-primary">⬇ Consolidar desde carpeta</button></div>
+      </div>
+    </section>
+
+    <!-- ===== 4. AYUDA ===== -->
+    <section class="view">
+      <div class="pagehead"><h1>Centro de ayuda</h1><p>Guía rápida para sacarle el máximo al sistema.</p></div>
+
+      <div class="quickstart">
+        <div class="qs"><div class="n">01</div><h4>Inicia sesión</h4><p>Verifica tu correo, contraseña y licencia activa.</p></div>
+        <div class="qs"><div class="n">02</div><h4>Descarga comprobantes</h4><p>Ingresa RUC, clave del SRI y filtros.</p></div>
+        <div class="qs"><div class="n">03</div><h4>Genera o consolida</h4><p>Elige formato (XML/PDF) según lo que necesites.</p></div>
+        <div class="qs"><div class="n">04</div><h4>Revisa el historial</h4><p>Consulta el estado de cada ejecución.</p></div>
+      </div>
+
+      <div class="actions" style="margin-bottom:1.25rem">
+        <button class="btn btn-primary">▶ Activar tour del primer uso</button>
+        <button class="btn btn-ghost">Marcar tour como visto</button>
+      </div>
+
+      <div class="acc">
+        <details open><summary><span class="ic">●</span> Inicio de sesión y licencias <span class="pm">+</span></summary>
+          <div class="body">El acceso depende de la base de datos. Si el usuario no tiene licencia activa, no podrá ingresar. La sesión queda vinculada a un único dispositivo.</div></details>
+        <details><summary><span class="ic">●</span> Descarga de resultados <span class="pm">+</span></summary>
+          <div class="body">Selecciona la carpeta destino, define filtros y ejecuta. Los documentos se guardan organizados por RUC y periodo.</div></details>
+        <details><summary><span class="ic">●</span> Descarga de trámites <span class="pm">+</span></summary>
+          <div class="body">Compatible con comprobantes recibidos y emitidos por rango de fechas, mes o año completo.</div></details>
+        <details><summary><span class="ic">●</span> Consolidación desde carpeta <span class="pm">+</span></summary>
+          <div class="body">Une documentos dispersos en un consolidado XML/PDF listo para tu contabilidad.</div></details>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+  const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+  function go(i,el){$$('.tab').forEach(t=>t.classList.remove('on'));el.classList.add('on');
+    $$('#app .view').forEach((v,k)=>v.classList.toggle('on',k===i));window.scrollTo({top:0,behavior:'smooth'})}
+  function seg(el){[...el.parentElement.children].forEach(b=>b.classList.remove('on'));el.classList.add('on')}
+  function pw(idOrEl,btn){const el=typeof idOrEl==='string'?document.getElementById(idOrEl):idOrEl;
+    el.type=el.type==='password'?'text':'password';btn.style.opacity=el.type==='text'?1:.55}
+  function exp(btn){const tr=btn.closest('tr').nextElementSibling;const on=tr.classList.toggle('on');btn.textContent=on?'−':'+'}
+  function theme(){const h=document.documentElement;h.dataset.theme=h.dataset.theme==='dark'?'light':'dark'}
+  function run(btn){$('#prog').style.display='block';btn.textContent='⏸ En proceso…';setTimeout(()=>btn.textContent='▶ Iniciar proceso',2600)}
+  function logout(){$('#app').style.display='none';$('#login').classList.add('on')}
+  function enter(){$('#login').classList.remove('on');$('#app').style.display='block';window.scrollTo(0,0)}
+  function rec(show){$('#view-login').classList.toggle('hidden',show);$('#view-rec').classList.toggle('hidden',!show)}
+</script>
+</body>
+</html>
