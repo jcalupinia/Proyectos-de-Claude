@@ -225,8 +225,14 @@
     border:1.5px solid #22c55e;background:rgba(7,13,8,.6)}
   #home .home-brand b{display:block;font-size:clamp(.78rem,1.4vw,1rem);font-weight:800;color:#fff;line-height:1.1}
   #home .home-brand span{display:block;font-size:clamp(.6rem,1vw,.72rem);letter-spacing:.14em;text-transform:uppercase;color:#86e3a8}
-  #home .cta-wrap{position:absolute;z-index:2;left:0;right:0;bottom:7%;display:flex;justify-content:center;padding:0 1rem}
+  #home .cta-wrap{position:absolute;z-index:3;left:0;right:0;bottom:6%;display:flex;justify-content:center;padding:0 1rem}
   #home .cta-wrap .btn{box-shadow:0 12px 40px -8px rgba(34,197,94,.55)}
+  @media (max-width:760px){
+    #home{display:flex;flex-direction:column;justify-content:center;gap:1.4rem;padding:1.25rem 0}
+    .home-frame{width:100%}
+    #home .cta-wrap{position:static;bottom:auto}
+    #home .home-brand{bottom:5%}
+  }
 
 </style>
 </head>
@@ -254,9 +260,9 @@
         <span>Descarga y auditoría del SRI</span>
       </span>
     </div>
-    <div class="cta-wrap">
-      <button class="btn btn-primary" style="font-size:1rem;padding:.95rem 2rem" onclick="enterHome()">Ingresar al portal →</button>
-    </div>
+  </div>
+  <div class="cta-wrap">
+    <button class="btn btn-primary" style="font-size:1rem;padding:.95rem 2rem" onclick="enterHome()">Ingresar al portal →</button>
   </div>
 </div>
 
