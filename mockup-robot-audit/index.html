@@ -176,7 +176,8 @@
   #login{display:none;min-height:100vh;place-items:center;padding:2rem}
   #login.on{display:grid}
   .login-card{width:100%;max-width:420px;text-align:center}
-  .robot{width:120px;height:120px;margin:0 auto .5rem}
+  .robot{width:230px;height:auto;margin:0 auto .5rem;display:block;
+    filter:drop-shadow(0 10px 34px rgba(34,197,94,.22))}
   .login-card h1{font-size:1.7rem;margin-bottom:.4rem}
   .login-card .sub{color:var(--muted);font-size:.92rem;margin-bottom:1.5rem}
   .login-form{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:1.5rem;text-align:left;
@@ -200,14 +201,7 @@
 <!-- ============ LOGIN / RECUPERAR ============ -->
 <div id="login">
   <div class="login-card">
-    <svg class="robot" viewBox="0 0 120 120" fill="none" aria-hidden="true">
-      <circle cx="84" cy="40" r="18" fill="none" stroke="#22c55e" stroke-width="2.5"/>
-      <text x="84" y="38" text-anchor="middle" font-size="9" font-weight="800" fill="#22c55e">AUDIT</text>
-      <text x="84" y="48" text-anchor="middle" font-size="9" font-weight="800" fill="#22c55e">IA</text>
-      <rect x="30" y="34" width="26" height="24" rx="7" fill="none" stroke="url(#g)" stroke-width="2.5"/>
-      <circle cx="39" cy="46" r="2.4" fill="#5b8cff"/><circle cx="47" cy="46" r="2.4" fill="#5b8cff"/>
-      <path d="M43 58 V72 M43 72 H62 M43 72 H30 M30 72 V86 M62 72 V64" stroke="url(#g)" stroke-width="2.5" stroke-linecap="round"/>
-    </svg>
+    <img class="robot" src="assets/robot-ai.svg" alt="Robot de auditoría sosteniendo el emblema AUDIT IA" width="230" height="186">
 
     <div id="view-login">
       <h1>Iniciar sesión</h1>

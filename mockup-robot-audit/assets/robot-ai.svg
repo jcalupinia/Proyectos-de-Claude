@@ -1,0 +1,70 @@
+<svg viewBox="0 0 260 210" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Robot de auditoría con emblema AUDIT IA">
+  <defs>
+    <linearGradient id="steel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1b2740"/>
+      <stop offset="1" stop-color="#0c1322"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#6ea0ff"/>
+      <stop offset="1" stop-color="#22c55e"/>
+    </linearGradient>
+    <radialGradient id="orb" cx="38%" cy="34%" r="72%">
+      <stop offset="0" stop-color="#9af6bf"/>
+      <stop offset="55%" stop-color="#22c55e"/>
+      <stop offset="100%" stop-color="#0c7a3e"/>
+    </radialGradient>
+    <radialGradient id="eye" cx="50%" cy="40%" r="60%">
+      <stop offset="0" stop-color="#d6fff0"/>
+      <stop offset="60%" stop-color="#34d36a"/>
+      <stop offset="100%" stop-color="#0f8a4a"/>
+    </radialGradient>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="4" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- halo -->
+  <ellipse cx="130" cy="120" rx="120" ry="78" fill="#22c55e" opacity="0.06"/>
+
+  <!-- ===== brazo que sostiene el orbe ===== -->
+  <g stroke="url(#edge)" stroke-width="6" stroke-linecap="round" fill="none" opacity="0.95">
+    <path d="M96 150 q30 22 64 6"/>
+  </g>
+  <circle cx="96" cy="150" r="6" fill="#0c1322" stroke="url(#edge)" stroke-width="3"/>
+
+  <!-- ===== cuerpo / hombros ===== -->
+  <path d="M70 196 q4 -34 42 -34 q38 0 42 34 Z" fill="url(#steel)" stroke="url(#edge)" stroke-width="2.5"/>
+  <rect x="104" y="150" width="16" height="16" rx="5" fill="url(#steel)" stroke="url(#edge)" stroke-width="2"/>
+
+  <!-- ===== cabeza ===== -->
+  <!-- antena -->
+  <line x1="112" y1="40" x2="112" y2="58" stroke="url(#edge)" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="112" cy="36" r="5" fill="#34d36a" filter="url(#glow)"/>
+  <!-- orejas / módulos -->
+  <rect x="58" y="92" width="12" height="26" rx="5" fill="url(#steel)" stroke="url(#edge)" stroke-width="2"/>
+  <rect x="154" y="92" width="12" height="26" rx="5" fill="url(#steel)" stroke="url(#edge)" stroke-width="2"/>
+  <!-- casco -->
+  <rect x="66" y="56" width="92" height="92" rx="30" fill="url(#steel)" stroke="url(#edge)" stroke-width="3"/>
+  <!-- visor -->
+  <rect x="78" y="74" width="68" height="50" rx="20" fill="#070d18" stroke="#243450" stroke-width="2"/>
+  <!-- ojos -->
+  <circle cx="100" cy="99" r="9" fill="url(#eye)" filter="url(#glow)"/>
+  <circle cx="124" cy="99" r="9" fill="url(#eye)" filter="url(#glow)"/>
+  <circle cx="98" cy="96" r="2.6" fill="#ffffff" opacity="0.9"/>
+  <circle cx="122" cy="96" r="2.6" fill="#ffffff" opacity="0.9"/>
+  <!-- boca: barritas de señal -->
+  <g fill="#34d36a" opacity="0.85">
+    <rect x="100" y="132" width="4" height="6" rx="2"/>
+    <rect x="108" y="129" width="4" height="9" rx="2"/>
+    <rect x="116" y="131" width="4" height="7" rx="2"/>
+  </g>
+
+  <!-- ===== orbe AUDIT IA ===== -->
+  <g filter="url(#glow)">
+    <circle cx="196" cy="120" r="34" fill="url(#orb)"/>
+  </g>
+  <ellipse cx="196" cy="120" rx="46" ry="16" fill="none" stroke="#a7f3c9" stroke-width="2" opacity="0.55" transform="rotate(-18 196 120)"/>
+  <text x="196" y="116" text-anchor="middle" font-family="Arial, sans-serif" font-size="15" font-weight="800" fill="#06351d">AUDIT</text>
+  <text x="196" y="132" text-anchor="middle" font-family="Arial, sans-serif" font-size="15" font-weight="800" fill="#06351d">IA</text>
+</svg>
