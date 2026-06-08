@@ -108,6 +108,11 @@ h1 {
 }
 .demo-nav button.on { background: #ec4899; color: #fff; }
 
+/* ---- Lenis smooth scroll (CSS recomendado) ---- */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-stopped { overflow: clip; }
+
 /* ---- GSAP Parallax ---- */
 .parallax { width: 100%; overflow-x: hidden; }
 

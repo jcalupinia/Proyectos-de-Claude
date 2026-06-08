@@ -1,6 +1,7 @@
 import { useRef, useLayoutEffect } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Lenis from 'lenis';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -15,6 +16,13 @@ export default function Parallax() {
   const root = useRef(null);
 
   useLayoutEffect(() => {
+    // Smooth scroll con Lenis, sincronizado con el ticker de GSAP y ScrollTrigger.
+    const lenis = new Lenis({ duration: 1.2, smoothWheel: true });
+    lenis.on('scroll', ScrollTrigger.update);
+    const tick = (time) => lenis.raf(time * 1000);
+    gsap.ticker.add(tick);
+    gsap.ticker.lagSmoothing(0);
+
     const ctx = gsap.context(() => {
       // 1. Hero: el título se aleja y se desvanece al hacer scroll (parallax).
       gsap.to('.hero-title', {
@@ -58,7 +66,11 @@ export default function Parallax() {
       });
     }, root);
 
-    return () => ctx.revert();
+    return () => {
+      ctx.revert();
+      gsap.ticker.remove(tick);
+      lenis.destroy();
+    };
   }, []);
 
   return (
@@ -86,7 +98,7 @@ export default function Parallax() {
       ))}
 
       <footer className="parallax-footer">
-        <p>GSAP {gsap.version} · ScrollTrigger</p>
+        <p>GSAP {gsap.version} · ScrollTrigger · Lenis smooth scroll</p>
       </footer>
     </div>
   );
