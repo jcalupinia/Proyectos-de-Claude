@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Demos — Audit Consulting / Robot SRI Audit</title>
+<style>
+  :root{--bg:#070b14;--panel:#111a2e;--line:#1f2b45;--text:#eaf0fb;--muted:#94a1bd;--green:#22c55e;--blue:#5b8cff}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:
+      radial-gradient(50rem 30rem at 85% -10%,rgba(91,140,255,.12),transparent 60%),
+      radial-gradient(40rem 30rem at -5% 5%,rgba(34,197,94,.10),transparent 60%),var(--bg);
+    color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;min-height:100vh;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:960px;margin:0 auto;padding:clamp(2rem,6vw,5rem) 1.25rem}
+  header{margin-bottom:2.5rem}
+  .eyebrow{display:inline-flex;align-items:center;gap:.5rem;font-size:.75rem;font-weight:700;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--green);border:1px solid rgba(34,197,94,.3);background:rgba(34,197,94,.08);
+    padding:.35rem .8rem;border-radius:999px}
+  h1{font-size:clamp(1.9rem,5vw,3rem);font-weight:800;letter-spacing:-.02em;margin:1.1rem 0 .6rem;line-height:1.05}
+  h1 span{background:linear-gradient(90deg,var(--blue),var(--green));-webkit-background-clip:text;background-clip:text;color:transparent}
+  header p{color:var(--muted);max-width:60ch;font-size:1.05rem}
+  .grid{display:grid;gap:1.1rem;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+  a.card{display:flex;flex-direction:column;gap:.5rem;text-decoration:none;color:inherit;background:var(--panel);
+    border:1px solid var(--line);border-radius:16px;padding:1.4rem;transition:.18s}
+  a.card:hover{transform:translateY(-3px);border-color:var(--green)}
+  .tag{align-self:flex-start;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+    padding:.22rem .55rem;border-radius:999px;background:rgba(91,140,255,.14);color:var(--blue)}
+  .tag.g{background:rgba(34,197,94,.14);color:var(--green)}
+  .card h2{font-size:1.2rem}
+  .card p{color:var(--muted);font-size:.9rem;line-height:1.5}
+  .card .go{margin-top:auto;color:var(--green);font-weight:700;font-size:.9rem}
+  footer{margin-top:3rem;color:var(--muted);font-size:.85rem;border-top:1px solid var(--line);padding-top:1.5rem}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <span class="eyebrow">● Demos en producción</span>
+      <h1>Robot SRI Audit<br><span>& páginas de demostración</span></h1>
+      <p>Maquetas y landings creadas en la sesión, desplegadas en GitHub Pages.
+         Ábrelas para revisarlas en tu dispositivo.</p>
+    </header>
+
+    <div class="grid">
+      <a class="card" href="mockup/index.html">
+        <span class="tag g">Rediseño principal</span>
+        <h2>Mockup Robot SRI Audit</h2>
+        <p>Las 8 pantallas rediseñadas: inicio, login, descarga, reporte/historial, consolidación y ayuda. Navegable y responsive.</p>
+        <span class="go">Abrir →</span>
+      </a>
+
+      <a class="card" href="landing/index.html">
+        <span class="tag">Landing estática</span>
+        <h2>ROBOT AUDIT SRI — Landing</h2>
+        <p>Landing optimizada (HTML + Tailwind purgado, &lt;200KB) con JSON-LD y fuentes self-hosted.</p>
+        <span class="go">Abrir →</span>
+      </a>
+
+      <a class="card" href="cinematic/index.html">
+        <span class="tag">Demo cinemática</span>
+        <h2>Scroll cinemático (GSAP)</h2>
+        <p>Imágenes que se expanden al hacer scroll, parallax y galería horizontal con GSAP + ScrollTrigger + Lenis.</p>
+        <span class="go">Abrir →</span>
+      </a>
+    </div>
+
+    <footer>
+      Audit Consulting Group · Robot SRI Audit — La landing animada en React (<code>app-magic/</code>)
+      se ejecuta en local con <code>npm run dev</code>.
+    </footer>
+  </div>
+</body>
+</html>
