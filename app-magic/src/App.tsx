@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import {
   Download, FileSpreadsheet, CalendarRange, FolderCheck,
   ShieldCheck, Layers, ArrowRight, Bot, Sparkles,
@@ -12,6 +13,8 @@ import { BentoGrid, BentoCard } from '@/components/magicui/bento-grid';
 import { BorderBeam } from '@/components/magicui/border-beam';
 import { DotPattern } from '@/components/magicui/dot-pattern';
 import { BlurFade } from '@/components/magicui/blur-fade';
+import { OrbitingCircles } from '@/components/magicui/orbiting-circles';
+import { Particles } from '@/components/magicui/particles';
 import { cn } from '@/lib/utils';
 
 const stats = [
@@ -51,6 +54,14 @@ const features = [
     grad: 'from-primary/20 to-transparent',
   },
 ];
+
+function OrbitIcon({ children }: { children: ReactNode }) {
+  return (
+    <div className="flex size-full items-center justify-center rounded-full border border-border bg-card/90 shadow-lg backdrop-blur">
+      {children}
+    </div>
+  );
+}
 
 function Stat({ value, suffix, label }: { value: number; suffix: string; label: string }) {
   return (
@@ -92,7 +103,8 @@ export default function App() {
 
       {/* HERO */}
       <main className="relative z-10">
-        <section className="mx-auto w-[min(1100px,92vw)] pt-36 pb-20 text-center sm:pt-44">
+        <section className="relative mx-auto w-[min(1100px,92vw)] pt-36 pb-20 text-center sm:pt-44">
+          <Particles className="absolute inset-0 -z-0" quantity={90} ease={70} color="#F59E0B" refresh />
           <BlurFade delay={0.05} inView>
             <div className="mx-auto flex w-fit items-center rounded-full border border-border bg-card/60 px-1 backdrop-blur">
               <AnimatedShinyText className="inline-flex items-center gap-2 px-3 py-1 text-sm">
@@ -130,18 +142,30 @@ export default function App() {
             </div>
           </BlurFade>
 
-          {/* Preview con BorderBeam */}
+          {/* Preview: robot con íconos orbitando (animado) + BorderBeam */}
           <BlurFade delay={0.44} inView>
-            <div className="relative mx-auto mt-16 max-w-3xl overflow-hidden rounded-2xl border border-border bg-card p-2 shadow-2xl">
-              <div className="rounded-xl bg-gradient-to-b from-muted/40 to-background p-8">
-                <img
-                  src="/img/robot-audit.svg"
-                  alt="Robot de auditoría descargando y revisando comprobantes del SRI"
-                  width={520} height={360}
-                  className="mx-auto w-full max-w-md"
-                />
-              </div>
-              <BorderBeam size={220} duration={10} colorFrom="#F59E0B" colorTo="#8B5CF6" />
+            <div className="relative mx-auto mt-16 flex h-[26rem] max-w-3xl items-center justify-center overflow-hidden rounded-2xl border border-border bg-gradient-to-b from-card to-background shadow-2xl">
+              {/* robot central */}
+              <img
+                src="/img/robot-audit.svg"
+                alt="Robot de auditoría descargando y revisando comprobantes del SRI"
+                width={260} height={180}
+                className="relative z-10 w-48 drop-shadow-[0_0_30px_rgba(245,158,11,0.25)]"
+              />
+              {/* anillo exterior */}
+              <OrbitingCircles radius={170} iconSize={46} duration={22}>
+                <OrbitIcon><Download className="size-5 text-primary" /></OrbitIcon>
+                <OrbitIcon><FileSpreadsheet className="size-5 text-secondary" /></OrbitIcon>
+                <OrbitIcon><CalendarRange className="size-5 text-primary" /></OrbitIcon>
+                <OrbitIcon><ShieldCheck className="size-5 text-secondary" /></OrbitIcon>
+              </OrbitingCircles>
+              {/* anillo interior (sentido inverso) */}
+              <OrbitingCircles radius={108} iconSize={38} duration={16} reverse>
+                <OrbitIcon><Layers className="size-4 text-secondary" /></OrbitIcon>
+                <OrbitIcon><FolderCheck className="size-4 text-primary" /></OrbitIcon>
+                <OrbitIcon><Bot className="size-4 text-primary" /></OrbitIcon>
+              </OrbitingCircles>
+              <BorderBeam size={240} duration={10} colorFrom="#F59E0B" colorTo="#8B5CF6" />
             </div>
           </BlurFade>
         </section>
