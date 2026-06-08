@@ -176,8 +176,11 @@
   #login{display:none;min-height:100vh;place-items:center;padding:2rem}
   #login.on{display:grid}
   .login-card{width:100%;max-width:420px;text-align:center}
-  .robot{width:230px;height:auto;margin:0 auto .5rem;display:block;
-    filter:drop-shadow(0 10px 34px rgba(34,197,94,.22))}
+  .login-acg{width:150px;height:auto;display:block;margin:0 auto 1rem;mix-blend-mode:screen}
+  .robot{width:215px;height:auto;margin:0 auto .25rem;display:block;
+    -webkit-mask-image:radial-gradient(ellipse 78% 74% at 50% 42%,#000 56%,transparent 80%);
+    mask-image:radial-gradient(ellipse 78% 74% at 50% 42%,#000 56%,transparent 80%);
+    filter:drop-shadow(0 12px 34px rgba(34,197,94,.20))}
   .login-card h1{font-size:1.7rem;margin-bottom:.4rem}
   .login-card .sub{color:var(--muted);font-size:.92rem;margin-bottom:1.5rem}
   .login-form{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:1.5rem;text-align:left;
@@ -244,7 +247,8 @@
 <!-- ============ LOGIN / RECUPERAR ============ -->
 <div id="login">
   <div class="login-card">
-    <img class="robot" src="assets/robot-ai.svg" alt="Robot de auditoría sosteniendo el emblema AUDIT IA" width="230" height="186">
+    <img class="login-acg" src="assets/logo-acg.png" alt="Audit Consulting Group" width="150" height="75">
+    <img class="robot" src="assets/robot3d.png" alt="Robot SRI Audit" width="215" height="270">
 
     <div id="view-login">
       <h1>Iniciar sesión</h1>
@@ -280,12 +284,9 @@
 <div id="app" style="display:none">
   <header class="topbar">
     <div class="brand">
-      <svg class="emblem" viewBox="0 0 40 40" fill="none" aria-hidden="true">
-        <rect x="2" y="2" width="36" height="36" rx="11" fill="none" stroke="url(#g)" stroke-width="2.2"/>
-        <circle cx="15" cy="17" r="2.6" fill="#5b8cff"/><circle cx="25" cy="17" r="2.6" fill="#22c55e"/>
-        <path d="M13 26c2 2.4 4.3 3.4 7 3.4s5-1 7-3.4" stroke="#eaf0fb" stroke-width="2" stroke-linecap="round"/>
-      </svg>
-      <span>SRI&nbsp;Robot&nbsp;Audit</span>
+      <img src="assets/logo-acg.png" alt="Audit Consulting Group" height="34" style="height:34px;width:auto;mix-blend-mode:screen">
+      <span style="width:1px;height:24px;background:var(--line)"></span>
+      <span style="font-weight:800">SRI&nbsp;Robot&nbsp;Audit</span>
     </div>
     <span class="title">Descarga y <b>Reporte Automático</b></span>
     <div class="top-actions">
@@ -299,17 +300,17 @@
 
   <div class="wrap">
     <nav class="tabs" role="tablist">
-      <button class="tab on" onclick="go(0,this)">Descarga de comprobantes</button>
+      <button class="tab on" onclick="go(0,this)">Descarga de Comprobantes</button>
       <button class="tab" onclick="go(1,this)">Reporte e Historial</button>
-      <button class="tab" onclick="go(2,this)">Consolidación</button>
+      <button class="tab" onclick="go(2,this)">Consolidación de documentos</button>
       <button class="tab" onclick="go(3,this)">Ayuda</button>
     </nav>
 
     <!-- ===== 1. DESCARGA (principal, agrupada) ===== -->
     <section class="view on">
       <div class="pagehead">
-        <h1>Descarga de comprobantes</h1>
-        <p>Configura credenciales y filtros; el robot descarga todo automáticamente.</p>
+        <h1>Descarga de Comprobantes</h1>
+        <p>Ingreso de Credenciales y Filtros — el robot descarga todo automáticamente.</p>
       </div>
 
       <div class="group">
@@ -348,10 +349,10 @@
       </div>
 
       <div class="group">
-        <div class="group-h"><span class="step">3</span><h3>Carpeta destino</h3><small>Dónde se guardan</small></div>
+        <div class="group-h"><span class="step">3</span><h3>Carpeta base donde se guardarán las descargas</h3></div>
         <div class="actions">
           <input class="input grow" placeholder="Ruta seleccionada…" value="C:\\AuditSRI\\Descargas" readonly>
-          <button class="btn btn-ghost">📁 Seleccionar carpeta</button>
+          <button class="btn btn-ghost">📁 Seleccionar carpeta de descarga</button>
         </div>
       </div>
 
@@ -375,11 +376,26 @@
       <div class="pagehead"><h1>Reporte e Historial</h1><p>Genera reportes por fechas y revisa las ejecuciones recientes.</p></div>
 
       <div class="group">
-        <div class="group-h"><span class="step">1</span><h3>Generar reporte por fechas</h3></div>
+        <div class="group-h"><span class="step">1</span><h3>Reporte por fechas</h3><small>Excel y PDF</small></div>
+        <div class="actions" style="margin-bottom:1rem">
+          <input class="input grow" value="C:\\AuditSRI\\Descargas" readonly>
+          <button class="btn btn-ghost">📁 Seleccionar carpeta fuente</button>
+        </div>
         <div class="grid">
-          <div class="field"><label>Carpeta fuente</label><input class="input" value="C:\\AuditSRI\\Descargas" readonly></div>
           <div class="field"><label>Origen</label><select class="select"><option>Recibidos</option><option>Emitidos</option></select></div>
-          <div class="field"><label>Tipo de comprobante</label><select class="select"><option>Facturas</option><option>Todos</option></select></div>
+          <div class="field"><label>Tipo de comprobante</label><select class="select"><option>Facturas</option><option>Notas de crédito</option><option>Todos</option></select></div>
+        </div>
+        <div class="field" style="margin-top:1rem"><label>Modo de fecha</label>
+          <div class="seg" style="flex-wrap:wrap">
+            <button class="on" onclick="seg(this)">Día específico</button>
+            <button onclick="seg(this)">Mes completo</button>
+            <button onclick="seg(this)">Rango de fechas</button>
+            <button onclick="seg(this)">Rango de meses</button>
+            <button onclick="seg(this)">Año completo</button>
+          </div>
+        </div>
+        <div class="grid" style="margin-top:1rem">
+          <div class="field"><label>Fecha</label><input class="input mono" type="date" value="2026-06-02"></div>
         </div>
         <div class="actions" style="margin-top:1rem">
           <button class="btn btn-primary">📊 Generar reporte por fechas</button>
@@ -443,27 +459,31 @@
 
     <!-- ===== 3. CONSOLIDACIÓN ===== -->
     <section class="view">
-      <div class="pagehead"><h1>Consolidación de documentos</h1><p>Genera reportes consolidados desde una carpeta ya descargada.</p></div>
+      <div class="pagehead"><h1>Consolidar desde carpeta</h1><p>Genera reportes consolidados desde documentos ya descargados.</p></div>
 
       <div class="group">
-        <div class="group-h"><span class="step">1</span><h3>Carpeta origen</h3></div>
+        <div class="group-h"><span class="step">1</span><h3>Carpeta origen a consolidar</h3></div>
         <div class="actions">
           <input class="input grow" placeholder="Carpeta a consolidar…" value="C:\\AuditSRI\\Descargas">
-          <button class="btn btn-ghost">📁 Seleccionar</button>
-          <button class="btn btn-ghost">Usar carpeta de descargas</button>
+          <button class="btn btn-ghost">📁 Seleccionar carpeta para consolidar</button>
+          <button class="btn btn-ghost">Usar carpeta de descargas activa</button>
         </div>
       </div>
 
       <div class="group">
         <div class="group-h"><span class="step">2</span><h3>Filtros</h3></div>
         <div class="grid">
-          <div class="field"><label>RUC <span class="hint">(opcional)</span></label><input class="input mono" placeholder="Todos"></div>
-          <div class="field"><label>Origen</label><select class="select"><option>Recibidos</option><option>Emitidos</option></select></div>
-          <div class="field"><label>Tipo de comprobante</label><select class="select"><option>Facturas</option><option>Todos</option></select></div>
-          <div class="field"><label>Año</label><select class="select"><option>2026</option><option>2025</option></select></div>
+          <div class="field"><label>RUC a buscar <span class="hint">(opcional)</span></label><input class="input mono" placeholder="Todos"></div>
+          <div class="field"><label>Origen a consolidar</label><select class="select"><option>Recibidos</option><option>Emitidos</option></select></div>
+          <div class="field"><label>Tipo de comprobante</label><select class="select"><option>Facturas</option><option>Notas de crédito</option><option>Todos</option></select></div>
+          <div class="field"><label>Año a consolidar</label><select class="select"><option>2026</option><option>2025</option></select></div>
         </div>
         <div class="field" style="margin-top:1rem"><label>Modo de fecha</label>
           <div class="seg"><button class="on" onclick="seg(this)">Mes y día</button><button onclick="seg(this)">Rango de meses</button><button onclick="seg(this)">Año completo</button></div>
+        </div>
+        <div class="grid" style="margin-top:1rem">
+          <div class="field"><label>Mes</label><select class="select"><option>Junio</option><option>Mayo</option></select></div>
+          <div class="field"><label>Día <span class="hint">(0 = Todos)</span></label><input class="input mono" value="0"></div>
         </div>
       </div>
 
@@ -479,7 +499,7 @@
 
     <!-- ===== 4. AYUDA ===== -->
     <section class="view">
-      <div class="pagehead"><h1>Centro de ayuda</h1><p>Guía rápida para sacarle el máximo al sistema.</p></div>
+      <div class="pagehead"><h1>Centro de ayuda</h1><p>Guía rápida para usar el sistema paso a paso.</p></div>
 
       <div class="quickstart">
         <div class="qs"><div class="n">01</div><h4>Inicia sesión</h4><p>Verifica tu correo, contraseña y licencia activa.</p></div>
@@ -502,6 +522,8 @@
           <div class="body">Compatible con comprobantes recibidos y emitidos por rango de fechas, mes o año completo.</div></details>
         <details><summary><span class="ic">●</span> Consolidación desde carpeta <span class="pm">+</span></summary>
           <div class="body">Une documentos dispersos en un consolidado XML/PDF listo para tu contabilidad.</div></details>
+        <details><summary><span class="ic">●</span> Preguntas frecuentes que hacer <span class="pm">+</span></summary>
+          <div class="body">Resuelve dudas comunes sobre descargas, formatos, licencias y generación de reportes.</div></details>
       </div>
     </section>
   </div>
