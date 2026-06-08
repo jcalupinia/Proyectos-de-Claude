@@ -26,6 +26,7 @@ jobs:
           cp -r landing _site/landing
           cp -r cinematic _site/cinematic
           cp -r mockup-robot-audit _site/mockup
+          touch _site/.nojekyll
       - uses: actions/configure-pages@v5
         with:
           enablement: true
