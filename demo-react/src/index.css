@@ -79,3 +79,101 @@ h1 {
   border-radius: 4px;
   font-size: .9em;
 }
+
+/* ---- Selector de demo ---- */
+.demo-nav {
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  display: flex;
+  gap: .5rem;
+  background: rgba(20,20,31,.8);
+  backdrop-filter: blur(10px);
+  padding: .35rem;
+  border-radius: 999px;
+  border: 1px solid #2a2a3a;
+}
+.demo-nav button {
+  border: 0;
+  background: transparent;
+  color: #9ca3af;
+  font: inherit;
+  font-weight: 600;
+  padding: .5rem 1rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all .2s;
+}
+.demo-nav button.on { background: #ec4899; color: #fff; }
+
+/* ---- GSAP Parallax ---- */
+.parallax { width: 100%; overflow-x: hidden; }
+
+.progress {
+  position: fixed;
+  top: 0; left: 0;
+  height: 4px;
+  width: 100%;
+  background: linear-gradient(90deg, #ec4899, #f59e0b);
+  transform: scaleX(0);
+  transform-origin: left;
+  z-index: 100;
+}
+
+.hero {
+  position: relative;
+  height: 100vh;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute;
+  inset: -20% 0;
+  background:
+    radial-gradient(circle at 30% 30%, #7c3aed55, transparent 40%),
+    radial-gradient(circle at 70% 70%, #ec489955, transparent 40%),
+    #0b0b12;
+}
+.hero-title {
+  position: relative;
+  font-size: clamp(2.5rem, 12vw, 8rem);
+  font-weight: 800;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+}
+.hero-title span { font-size: .4em; opacity: .6; margin-top: 1rem; }
+
+.panel {
+  position: relative;
+  height: 100vh;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+.panel-media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.panel-text {
+  position: relative;
+  text-align: center;
+  z-index: 2;
+  mix-blend-mode: difference;
+}
+.panel-text h2 { font-size: clamp(2rem, 8vw, 5rem); font-weight: 800; }
+.panel-text p { font-size: clamp(1rem, 2.5vw, 1.5rem); opacity: .85; margin-top: .5rem; }
+
+.parallax-footer {
+  height: 40vh;
+  display: grid;
+  place-items: center;
+  color: #6b7280;
+  font-size: .9rem;
+}

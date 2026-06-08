@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Parallax from './Parallax.jsx';
 
 const tools = [
   { name: 'n8n-MCP', tag: 'MCP', color: '#8b5cf6' },
@@ -11,9 +12,31 @@ const tools = [
 
 export default function App() {
   const [active, setActive] = useState(null);
+  const [view, setView] = useState('framer');
+
+  const nav = (
+    <nav className="demo-nav">
+      <button className={view === 'framer' ? 'on' : ''} onClick={() => setView('framer')}>
+        Framer Motion
+      </button>
+      <button className={view === 'gsap' ? 'on' : ''} onClick={() => setView('gsap')}>
+        GSAP · Scroll
+      </button>
+    </nav>
+  );
+
+  if (view === 'gsap') {
+    return (
+      <>
+        {nav}
+        <Parallax />
+      </>
+    );
+  }
 
   return (
     <main className="page">
+      {nav}
       <motion.h1
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
