@@ -47,18 +47,21 @@ Cuando termine, sigue las 3 instrucciones finales que imprime en pantalla.
 {
   "mcpServers": {
     "context7": {
-      "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp"]
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "@upstash/context7-mcp"]
     },
     "sequential-thinking": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"]
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "@modelcontextprotocol/server-sequential-thinking"]
     }
   }
 }
 ```
 
-4. Cerrar Claude **por completo** y volver a abrir.
+> 💡 **En Windows** usamos `cmd /c npx` (en vez de solo `npx`) porque algunas
+> versiones de Claude Desktop no resuelven `npx` directamente. Es la forma más confiable.
+
+4. Cerrar Claude **por completo** (incluido el ícono de la bandeja del sistema) y volver a abrir.
 
 ### Bloque 3 — Claude Code (reels #1, #4, #5)
 ```powershell

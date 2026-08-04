@@ -86,15 +86,17 @@ if (-not (Test-Path $claudeDir)) {
     New-Item -ItemType Directory -Path $claudeDir -Force | Out-Null
 }
 
-# Los dos servidores MCP que queremos
+# Los dos servidores MCP que queremos.
+# En Windows usamos "cmd /c npx" porque algunas versiones de Claude Desktop
+# no resuelven npx directamente (npx es un .cmd). Esta forma es la mas confiable.
 $nuevosServers = @{
     "context7" = @{
-        command = "npx"
-        args    = @("-y", "@upstash/context7-mcp")
+        command = "cmd"
+        args    = @("/c", "npx", "-y", "@upstash/context7-mcp")
     }
     "sequential-thinking" = @{
-        command = "npx"
-        args    = @("-y", "@modelcontextprotocol/server-sequential-thinking")
+        command = "cmd"
+        args    = @("/c", "npx", "-y", "@modelcontextprotocol/server-sequential-thinking")
     }
 }
 
